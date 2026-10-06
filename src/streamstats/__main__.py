@@ -5,6 +5,7 @@ import argparse
 # python -m streamstats analyze INPUT [INPUT ...] --format csv|jsonl --output REPORT.json
 # python -m streamstats analyze INPUT --format jsonl --skip-invalid
 
+# python -m streamstats analyze data/events.jsonl data/events.csv --format jsonl csv
 
 def parse():
     ''' Модуль создающий парсер

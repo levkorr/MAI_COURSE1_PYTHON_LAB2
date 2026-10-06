@@ -9,18 +9,8 @@ DATA = {
         "WARNING": 0
     },
     "by_source": {
-        "auth": 0,
-        "cache": 0,
-        "db": 0,
-        "payments": 0,
-        "web": 0
     },
     "top_error_sources": {
-        "auth": 0,
-        "cache": 0,
-        "db": 0,
-        "payments": 0,
-        "web": 0
     },
     "first_timestamp": "",
     "last_timestamp": ""
