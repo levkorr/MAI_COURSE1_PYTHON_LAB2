@@ -1,0 +1,27 @@
+{
+    "total_events": 36,
+    "by_level": {
+        "CRITICAL": 5,
+        "DEBUG": 5,
+        "ERROR": 11,
+        "INFO": 10,
+        "WARNING": 5
+    },
+    "by_source": {
+        "auth": 8,
+        "web": 7,
+        "db": 7,
+        "payments": 8,
+        "engine": 1,
+        "cache": 5
+    },
+    "top_error_sources": {
+        "payments": 5,
+        "db": 4,
+        "auth": 3,
+        "cache": 2,
+        "web": 2
+    },
+    "first_timestamp": "2024-03-01T08:00:00+00:00",
+    "last_timestamp": "2025-07-12T14:48:00+00:00"
+}

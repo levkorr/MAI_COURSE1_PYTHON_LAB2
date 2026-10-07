@@ -77,4 +77,4 @@ def full_parse(inputs, skip_invalid, format):
             key=lambda item: (-item[1], item[0])
         )[:TOP_K])
 
-    print(json.dumps(data, indent=4))
+    return json.dumps(data, indent=4)

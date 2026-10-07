@@ -1,6 +1,7 @@
 from .parsers import *
 import sys
-from .errors import StreamStatsError
+from .errors import StreamStatsError, FileAccessError
+import pathlib
 import argparse
 # python -m streamstats analyze INPUT [INPUT ...] --format csv|jsonl --output REPORT.json
 # python -m streamstats analyze INPUT --format jsonl --skip-invalid
@@ -43,8 +44,19 @@ def main():
         format = args.format
         report_path = args.report_path
         skip_invalid = args.skip_invalid
-        full_parse(inputs, skip_invalid, format)
+        data = full_parse(inputs, skip_invalid, format)
+        if report_path:
+            try:
+                path = pathlib.Path(report_path)
+                pathlib.Path("reports").mkdir(exist_ok=True)
+                
+                with open(f"reports/{report_path}","w", encoding="utf-8") as file:
+                    file.write(data)
 
+            except Exception:
+                raise FileAccessError(report_path)
+        else:
+            print(data)
 
 if __name__ == "__main__":
     try:

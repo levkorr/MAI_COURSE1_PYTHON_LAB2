@@ -12,4 +12,7 @@ class WrongFormatError(StreamStatsError):
 class InvalidEventError(StreamStatsError):
     def __init__(self, file_number, line_number):
         super().__init__(f"Invalid event: file number: {file_number}, line number: {line_number}")
-    
+
+class FileAccessError(StreamStatsError):
+    def __init__(self, report_path):
+        super().__init__(f"Can't access file: {report_path}")
