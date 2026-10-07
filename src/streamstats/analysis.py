@@ -31,5 +31,5 @@ def invalid_analyze(data, skip_invalid, invalid_lines, invalid_files):
         data["WARNING"]["invalid_lines"] = invalid_lines
         data["WARNING"]["invalid_files"] = invalid_files
     else:
-        data = data[:-1]
+        data.popitem()
     return data
