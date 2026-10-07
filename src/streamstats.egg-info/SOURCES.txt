@@ -5,7 +5,6 @@ src/streamstats/__main__.py
 src/streamstats/analysis.py
 src/streamstats/constants.py
 src/streamstats/errors.py
-src/streamstats/models.py
 src/streamstats/parsers.py
 src/streamstats/report.py
 src/streamstats.egg-info/PKG-INFO
