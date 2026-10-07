@@ -15,7 +15,6 @@ DATA = {
     "first_timestamp": "",
     "last_timestamp": "",
     "WARNING": {
-        "invalid_lines": 0,
-        "invalid_files": 0
+        "invalid_lines": 0
     }
 }

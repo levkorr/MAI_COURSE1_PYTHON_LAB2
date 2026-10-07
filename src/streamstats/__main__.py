@@ -42,11 +42,14 @@ def parse():
 def main():
     args = parse()
     if args.command == "analyze":
+        # Чтение аргументов
         inputs = args.inputs
         format = args.format
         report_path = args.report_path
         skip_invalid = args.skip_invalid
+        # Запуск парсера
         data = full_parse(inputs, skip_invalid, format)
+        # Вывод в терминал или в определенное место
         if report_path:
             try:
                 pathlib.Path("reports").mkdir(exist_ok=True)
@@ -56,7 +59,7 @@ def main():
                 raise FileAccessError(report_path)
         else:
             print(data)
-
+        
 
 if __name__ == "__main__":
     try:

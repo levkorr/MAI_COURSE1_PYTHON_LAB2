@@ -26,10 +26,9 @@ def analyze(event, data):
     return data
 
 
-def invalid_analyze(data, skip_invalid, invalid_lines, invalid_files):
+def invalid_analyze(data, skip_invalid, invalid_lines):
     if skip_invalid:
         data["WARNING"]["invalid_lines"] = invalid_lines
-        data["WARNING"]["invalid_files"] = invalid_files
     else:
         data.popitem()
     return data

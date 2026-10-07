@@ -5,11 +5,12 @@ import csv
 from .analysis import analyze, invalid_analyze
 from .constants import DATA
 from .constants import TOP_K
-from .errors import InvalidEventError, WrongFormatError, UnsupportedFormatError, EmptyFileError
+from .errors import InvalidEventError, WrongFormatError, UnsupportedFormatError
 
 invalid_lines = 0
-invalid_files = 0
 
+def validate_event(data):
+    print("Hello world")
 
 def make_event(data):
     return {
@@ -58,19 +59,12 @@ def parse_csv(path, skip_invalid, file_number):
 
 def full_parse(inputs, skip_invalid, format):
     global invalid_lines
-    global invalid_files
     data = DATA
     file_number = 0
 
     for file in inputs:
         file_number += 1
         path = pathlib.Path(file)
-
-        if path.stat().st_size == 0:
-            if skip_invalid:
-                invalid_files += 1
-            else:
-                raise EmptyFileError(file)
 
         if path.suffix.strip(".") not in format:
             raise WrongFormatError(path.suffix.strip("."))
@@ -89,6 +83,6 @@ def full_parse(inputs, skip_invalid, format):
             key=lambda item: (-item[1], item[0])
         )[:TOP_K])
 
-    invalid_analyze(data, skip_invalid, invalid_lines, invalid_files)
+    invalid_analyze(data, skip_invalid, invalid_lines)
 
     return json.dumps(data, indent=4)
