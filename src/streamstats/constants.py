@@ -13,5 +13,9 @@ DATA = {
     "top_error_sources": {
     },
     "first_timestamp": "",
-    "last_timestamp": ""
+    "last_timestamp": "",
+    "WARNING": {
+        "invalid_lines": 0,
+        "invalid_files": 0
+    }
 }

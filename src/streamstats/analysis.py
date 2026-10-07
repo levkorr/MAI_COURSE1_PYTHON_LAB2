@@ -24,3 +24,12 @@ def analyze(event, data):
         elif datetime.fromisoformat(event["timestamp"]) > datetime.fromisoformat(data["last_timestamp"]):
             data["last_timestamp"] = event["timestamp"]
     return data
+
+
+def invalid_analyze(data, skip_invalid, invalid_lines, invalid_files):
+    if skip_invalid:
+        data["WARNING"]["invalid_lines"] = invalid_lines
+        data["WARNING"]["invalid_files"] = invalid_files
+    else:
+        data = data[:-1]
+    return data

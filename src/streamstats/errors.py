@@ -21,3 +21,8 @@ class InvalidEventError(StreamStatsError):
 class FileAccessError(StreamStatsError):
     def __init__(self, report_path):
         super().__init__(f"Can't access file: {report_path}")
+
+
+class EmptyFileError(StreamStatsError):
+    def __init__(self, file):
+        super().__init__(f"Empty file: {file}")
