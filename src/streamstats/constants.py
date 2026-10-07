@@ -1,4 +1,5 @@
 TOP_K = 5
+SUPPORTED_FORMATS = ["csv", "jsonl"]
 DATA = {
     "total_events": 0,
     "by_level": {

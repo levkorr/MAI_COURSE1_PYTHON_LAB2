@@ -4,13 +4,15 @@ import csv
 
 from .analysis import analyze, invalid_analyze
 from .constants import DATA
-from .constants import TOP_K
+from .constants import TOP_K, SUPPORTED_FORMATS
 from .errors import InvalidEventError, WrongFormatError, UnsupportedFormatError
 
 invalid_lines = 0
 
+
 def validate_event(data):
     print("Hello world")
+
 
 def make_event(data):
     return {
@@ -57,7 +59,7 @@ def parse_csv(path, skip_invalid, file_number):
                     raise InvalidEventError(file_number, line_number)
 
 
-def full_parse(inputs, skip_invalid, format):
+def full_parse(inputs, skip_invalid, formats):
     global invalid_lines
     data = DATA
     file_number = 0
@@ -65,18 +67,18 @@ def full_parse(inputs, skip_invalid, format):
     for file in inputs:
         file_number += 1
         path = pathlib.Path(file)
-
-        if path.suffix.strip(".") not in format:
+        file_format = path.suffix.strip(".")
+        if file_format not in formats and file_format in SUPPORTED_FORMATS:
             raise WrongFormatError(path.suffix.strip("."))
-
-        if path.suffix == ".jsonl":
+        if file_format == "jsonl":
             for event in parse_jsonl(path, skip_invalid, file_number):
                 data = analyze(event, data)
 
-        elif path.suffix == ".csv":
+        elif file_format == "csv":
             for event in parse_csv(path, skip_invalid, file_number):
                 data = analyze(event, data)
-
+        else:
+            raise UnsupportedFormatError(file_format)
     data["top_error_sources"] = dict(
         sorted(
             data["top_error_sources"].items(),

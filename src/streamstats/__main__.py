@@ -30,7 +30,7 @@ def parse():
     parse_analyze = commands.add_parser("analyze")
     parse_analyze.add_argument("inputs", nargs="+")
     parse_analyze.add_argument(
-        "--format", dest="format", nargs="+", required=True)
+        "--format", dest="formats", nargs="+", required=True)
     parse_analyze.add_argument("--output", dest="report_path", required=False)
     parse_analyze.add_argument("--skip-invalid", action="store_true")
 
@@ -44,11 +44,11 @@ def main():
     if args.command == "analyze":
         # Чтение аргументов
         inputs = args.inputs
-        format = args.format
+        formats = args.formats
         report_path = args.report_path
         skip_invalid = args.skip_invalid
         # Запуск парсера
-        data = full_parse(inputs, skip_invalid, format)
+        data = full_parse(inputs, skip_invalid, formats)
         # Вывод в терминал или в определенное место
         if report_path:
             try:
@@ -59,7 +59,7 @@ def main():
                 raise FileAccessError(report_path)
         else:
             print(data)
-        
+
 
 if __name__ == "__main__":
     try:
