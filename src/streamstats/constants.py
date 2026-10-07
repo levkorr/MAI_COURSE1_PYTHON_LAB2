@@ -14,4 +14,4 @@ DATA = {
     },
     "first_timestamp": "",
     "last_timestamp": ""
-    }
+}

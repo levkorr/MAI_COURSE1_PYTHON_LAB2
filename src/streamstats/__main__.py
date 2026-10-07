@@ -8,6 +8,7 @@ import argparse
 
 # python -m streamstats analyze data/events.jsonl data/events.csv --format jsonl csv
 
+
 def parse():
     ''' Модуль создающий парсер
 
@@ -28,7 +29,8 @@ def parse():
     # Для команды analyze
     parse_analyze = commands.add_parser("analyze")
     parse_analyze.add_argument("inputs", nargs="+")
-    parse_analyze.add_argument("--format", dest="format", nargs="+", required=True)
+    parse_analyze.add_argument(
+        "--format", dest="format", nargs="+", required=True)
     parse_analyze.add_argument("--output", dest="report_path", required=False)
     parse_analyze.add_argument("--skip-invalid", action="store_true")
 
@@ -47,21 +49,19 @@ def main():
         data = full_parse(inputs, skip_invalid, format)
         if report_path:
             try:
-                path = pathlib.Path(report_path)
                 pathlib.Path("reports").mkdir(exist_ok=True)
-                
-                with open(f"reports/{report_path}","w", encoding="utf-8") as file:
+                with open(f"reports/{report_path}", "w", encoding="utf-8") as file:
                     file.write(data)
-
             except Exception:
                 raise FileAccessError(report_path)
         else:
             print(data)
 
+
 if __name__ == "__main__":
     try:
         main()
     except StreamStatsError as e:
-        print(f"Expected error: {e}", file = sys.stderr)
+        print(f"Expected error: {e}", file=sys.stderr)
     except Exception as e:
-        print(f"Unexpected error: {e}", file = sys.stderr)
+        print(f"Unexpected error: {e}", file=sys.stderr)

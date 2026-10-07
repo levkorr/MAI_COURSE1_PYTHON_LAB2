@@ -1,5 +1,6 @@
 from datetime import datetime
 
+
 def analyze(event, data):
     data["total_events"] += 1
     data["by_level"][event["level"]] += 1
@@ -7,8 +8,8 @@ def analyze(event, data):
         if event["source"] in data["top_error_sources"]:
             data["top_error_sources"][event["source"]] += 1
         else:
-            data["top_error_sources"][event["source"]] =1
-    
+            data["top_error_sources"][event["source"]] = 1
+
     if event["source"] in data["by_source"]:
         data["by_source"][event["source"]] += 1
     else:
