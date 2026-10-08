@@ -20,7 +20,7 @@ class InvalidEventError(StreamStatsError):
 class FileAccessError(StreamStatsError):
     def __init__(self, report_path):
         super().__init__(f"Can't access file: {report_path}")
-'''
+
 class InvalidEventTimestampError(InvalidEventError):
     def __init__(self, file_number, line_number):
         super().__init__(
@@ -40,4 +40,3 @@ class InvalidEventMessageError(InvalidEventError):
     def __init__(self, file_number, line_number):
         super().__init__(
             f"Invalid event message: file number: {file_number}, line number: {line_number}")
-'''

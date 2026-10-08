@@ -3,6 +3,7 @@ import sys
 from .errors import StreamStatsError, FileAccessError
 import pathlib
 import argparse
+from .report import report
 # python -m streamstats analyze INPUT [INPUT ...] --format csv|jsonl --output REPORT.json
 # python -m streamstats analyze INPUT --format jsonl --skip-invalid
 
@@ -48,7 +49,7 @@ def main():
         report_path = args.report_path
         skip_invalid = args.skip_invalid
         # Запуск парсера
-        data = full_parse(inputs, skip_invalid, formats)
+        data = report(inputs, skip_invalid, formats)
         # Вывод в терминал или в определенное место
         if report_path:
             try:
