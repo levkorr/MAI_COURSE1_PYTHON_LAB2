@@ -11,7 +11,7 @@ from .parsers import parse_csv, parse_jsonl
 def report(inputs, skip_invalid, formats):
     data = DATA
 
-    for file_number, file in inputs:
+    for file_number, file in enumerate(inputs):
         path = pathlib.Path(file)
         file_format = path.suffix.strip(".")
         if file_format not in formats and file_format in SUPPORTED_FORMATS:
