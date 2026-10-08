@@ -3,8 +3,8 @@ import csv
 from datetime import datetime
 from . import constants
 
-from .constants import LEVELS, INVALID_LINES
-from .errors import InvalidEventError, InvalidEventLevelError, InvalidEventMessageError, InvalidEventSourceError, InvalidEventTimestampError
+from .constants import LEVELS
+from .errors import InvalidEventError, InvalidDelimeterError
 
 
 def validate_event(data, file_number, line_number):
@@ -17,16 +17,16 @@ def validate_event(data, file_number, line_number):
     try:
         datetime.fromisoformat(raw_timestamp)
     except (ValueError, TypeError):
-        raise InvalidEventTimestampError(file_number, line_number)
+        raise InvalidEventError(file_number, line_number)
     # level
     if raw_level not in LEVELS:
-        raise InvalidEventLevelError(file_number, line_number)
+        raise InvalidEventError(file_number, line_number)
     # source
     if not isinstance(raw_source, str) or not raw_source.strip():
-        raise InvalidEventSourceError(file_number, line_number)
+        raise InvalidEventError(file_number, line_number)
     # message
     if not isinstance(raw_message, str) or not raw_message.strip():
-        raise InvalidEventMessageError(file_number, line_number)
+        raise InvalidEventError(file_number, line_number)
 
 
 def make_event(data):
@@ -45,13 +45,11 @@ def parse_jsonl(path, skip_invalid, file_number):
         for line in file:
             line_number += 1
 
-            if not line.strip():
-                continue
             try:
                 data = json.loads(line)
                 validate_event(data, file_number, line_number)
                 yield make_event(data)
-            except Exception:
+            except (InvalidEventError, json.JSONDecodeError):
                 if skip_invalid:
                     constants.INVALID_LINES += 1
                 else:
@@ -60,17 +58,24 @@ def parse_jsonl(path, skip_invalid, file_number):
 
 def parse_csv(path, skip_invalid, file_number):
     with open(path, "r", encoding="utf-8", newline="") as file:
-        reader = csv.DictReader(file)
+        try:
+            sample = file.read(1024)
+            file.seek(0)
+
+            delimiter = csv.Sniffer().sniff(sample, delimiters=",;\t")
+        except csv.Error:
+            raise InvalidDelimeterError(file_number)
+
+        reader = csv.DictReader(file, dialect=delimiter)
         line_number = 0
 
-        for line in reader:
+        for data in reader:
             line_number += 1
 
             try:
-                data = json.loads(line)
                 validate_event(data, file_number, line_number)
                 yield make_event(data)
-            except Exception:
+            except InvalidEventError:
                 if skip_invalid:
                     constants.INVALID_LINES += 1
                 else:

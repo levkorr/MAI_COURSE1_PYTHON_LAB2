@@ -3,7 +3,7 @@ import json
 
 from . import constants
 
-from .constants import DATA, SUPPORTED_FORMATS, TOP_K, INVALID_LINES
+from .constants import DATA, SUPPORTED_FORMATS, TOP_K
 from .errors import WrongFormatError, UnsupportedFormatError
 from .parsers import parse_csv, parse_jsonl
 from .analysis import analyze, invalid_analyze
