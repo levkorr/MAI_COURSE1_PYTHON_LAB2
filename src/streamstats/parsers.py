@@ -1,5 +1,6 @@
 import csv
 import json
+import logging
 from datetime import datetime
 
 from . import constants
@@ -44,11 +45,12 @@ def parse_jsonl(path, skip_invalid, file_number):
 
             try:
                 data = json.loads(line)
-                validate_event(data, file_number, line_number)
+                validate_event(data, file_number+1, line_number+1)
                 yield make_event(data)
             except (InvalidEventError, json.JSONDecodeError):
                 if skip_invalid:
                     constants.INVALID_LINES += 1
+                    logging.warning(f"Invalid Event: file number: {file_number+1}, line number: {line_number+1}")
                 else:
                     raise InvalidEventError(file_number, line_number)
 
@@ -57,7 +59,9 @@ def parse_csv(path, skip_invalid, file_number):
     with open(path, "r", encoding="utf-8", newline="") as file:
 
         try:
-            sample = file.read(1024)
+            sample = file.readline()
+            if not sample:
+                return
             file.seek(0)
 
             delimiter = csv.Sniffer().sniff(sample, delimiters=",;\t")
@@ -69,10 +73,11 @@ def parse_csv(path, skip_invalid, file_number):
         for line_number, data in enumerate(reader):
 
             try:
-                validate_event(data, file_number, line_number)
+                validate_event(data, file_number+1, line_number+1)
                 yield make_event(data)
             except InvalidEventError:
                 if skip_invalid:
                     constants.INVALID_LINES += 1
+                    logging.warning(f"Invalid Event: file number: {file_number+1}, line number: {line_number+1}")
                 else:
-                    raise InvalidEventError(file_number, line_number)
+                    raise InvalidEventError(file_number+1, line_number+1)
