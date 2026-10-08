@@ -2,7 +2,7 @@ TOP_K = 5
 SUPPORTED_FORMATS = ["csv", "jsonl"]
 LEVELS = ["DEBUG", "INFO", "WARNING", "ERROR", "CRITICAL"]
 INVALID_LINES = 0
-DATA = {
+STATS = {
     "total_events": 0,
     "by_level": {
         "CRITICAL": 0,
@@ -17,7 +17,5 @@ DATA = {
     },
     "first_timestamp": "",
     "last_timestamp": "",
-    "WARNING": {
-        "invalid_lines": 0
-    }
+    "invalid_lines": 0
 }

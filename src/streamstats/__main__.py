@@ -4,7 +4,6 @@ import sys
 
 from . import constants
 from .errors import FileAccessError, StreamStatsError
-from .parsers import *
 from .report import report
 
 invalid_lines = 0

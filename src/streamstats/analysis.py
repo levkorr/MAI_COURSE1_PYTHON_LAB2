@@ -1,34 +1,26 @@
 from datetime import datetime
 
 
-def analyze(event, data):
-    data["total_events"] += 1
-    data["by_level"][event["level"]] += 1
+def analyze(event, stats):
+    stats["total_events"] += 1
+    stats["by_level"][event["level"]] += 1
     if event["level"] == "ERROR" or event["level"] == "CRITICAL":
-        if event["source"] in data["top_error_sources"]:
-            data["top_error_sources"][event["source"]] += 1
+        if event["source"] in stats["top_error_sources"]:
+            stats["top_error_sources"][event["source"]] += 1
         else:
-            data["top_error_sources"][event["source"]] = 1
+            stats["top_error_sources"][event["source"]] = 1
 
-    if event["source"] in data["by_source"]:
-        data["by_source"][event["source"]] += 1
+    if event["source"] in stats["by_source"]:
+        stats["by_source"][event["source"]] += 1
     else:
-        data["by_source"][event["source"]] = 1
+        stats["by_source"][event["source"]] = 1
 
-    if data["first_timestamp"] == "":
-        data["first_timestamp"] = event["timestamp"]
-        data["last_timestamp"] = event["timestamp"]
+    if stats["first_timestamp"] == "":
+        stats["first_timestamp"] = event["timestamp"]
+        stats["last_timestamp"] = event["timestamp"]
     else:
-        if datetime.fromisoformat(event["timestamp"]) < datetime.fromisoformat(data["first_timestamp"]):
-            data["first_timestamp"] = event["timestamp"]
-        elif datetime.fromisoformat(event["timestamp"]) > datetime.fromisoformat(data["last_timestamp"]):
-            data["last_timestamp"] = event["timestamp"]
-    return data
-
-
-def invalid_analyze(data, skip_invalid, invalid_lines):
-    if skip_invalid:
-        data["WARNING"]["invalid_lines"] = invalid_lines
-    else:
-        data.popitem()
-    return data
+        if datetime.fromisoformat(event["timestamp"]) < datetime.fromisoformat(stats["first_timestamp"]):
+            stats["first_timestamp"] = event["timestamp"]
+        elif datetime.fromisoformat(event["timestamp"]) > datetime.fromisoformat(stats["last_timestamp"]):
+            stats["last_timestamp"] = event["timestamp"]
+    return stats

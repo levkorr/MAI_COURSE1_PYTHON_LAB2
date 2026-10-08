@@ -3,7 +3,6 @@ import json
 import logging
 from datetime import datetime
 
-from . import constants
 from .constants import LEVELS
 from .errors import InvalidDelimeterError, InvalidEventError
 
@@ -39,7 +38,7 @@ def make_event(data):
     }
 
 
-def parse_jsonl(path, skip_invalid, file_number):
+def parse_jsonl(path, skip_invalid, file_number, stats):
     with open(path, "r", encoding="utf-8") as file:
         for line_number, line in enumerate(file):
 
@@ -49,13 +48,13 @@ def parse_jsonl(path, skip_invalid, file_number):
                 yield make_event(data)
             except (InvalidEventError, json.JSONDecodeError):
                 if skip_invalid:
-                    constants.INVALID_LINES += 1
+                    stats["invalid_lines"]+=1
                     logging.warning(f"Invalid Event: file number: {file_number+1}, line number: {line_number+1}")
                 else:
-                    raise InvalidEventError(file_number, line_number)
+                    raise InvalidEventError(file_number+1, line_number+1)
 
 
-def parse_csv(path, skip_invalid, file_number):
+def parse_csv(path, skip_invalid, file_number, stats):
     with open(path, "r", encoding="utf-8", newline="") as file:
 
         try:
@@ -77,7 +76,7 @@ def parse_csv(path, skip_invalid, file_number):
                 yield make_event(data)
             except InvalidEventError:
                 if skip_invalid:
-                    constants.INVALID_LINES += 1
+                    stats["invalid_lines"]+=1
                     logging.warning(f"Invalid Event: file number: {file_number+1}, line number: {line_number+1}")
                 else:
                     raise InvalidEventError(file_number+1, line_number+1)
