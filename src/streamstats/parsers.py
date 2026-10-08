@@ -1,10 +1,10 @@
-import json
 import csv
+import json
 from datetime import datetime
-from . import constants
 
+from . import constants
 from .constants import LEVELS
-from .errors import InvalidEventError, InvalidDelimeterError
+from .errors import InvalidDelimeterError, InvalidEventError
 
 
 def validate_event(data, file_number, line_number):
@@ -40,10 +40,8 @@ def make_event(data):
 
 def parse_jsonl(path, skip_invalid, file_number):
     with open(path, "r", encoding="utf-8") as file:
-        line_number = 0
 
-        for line in file:
-            line_number += 1
+        for line_number, line in enumerate(file):
 
             try:
                 data = json.loads(line)
@@ -58,6 +56,7 @@ def parse_jsonl(path, skip_invalid, file_number):
 
 def parse_csv(path, skip_invalid, file_number):
     with open(path, "r", encoding="utf-8", newline="") as file:
+
         try:
             sample = file.read(1024)
             file.seek(0)
@@ -67,10 +66,8 @@ def parse_csv(path, skip_invalid, file_number):
             raise InvalidDelimeterError(file_number)
 
         reader = csv.DictReader(file, dialect=delimiter)
-        line_number = 0
 
-        for data in reader:
-            line_number += 1
+        for line_number, data in enumerate(reader):
 
             try:
                 validate_event(data, file_number, line_number)

@@ -1,8 +1,9 @@
-from .parsers import *
-import sys
-from .errors import StreamStatsError, FileAccessError
-import pathlib
 import argparse
+import pathlib
+import sys
+
+from .errors import FileAccessError, StreamStatsError
+from .parsers import *
 from .report import report
 
 # python -m streamstats analyze data/events.jsonl data/events.csv --format jsonl csv
@@ -22,7 +23,7 @@ def parse_help():
         Options:
             --format FORMAT [FORMAT, ...]       File formats (required)
             --output FILE                       Save JSON report to FILE
-                                                (by default prints to terminal)
+                                                (if is not present, prints to terminal)
             --skip-invalid                      Skip invalid events instead of stopping
         
         Support:
@@ -95,7 +96,7 @@ def main():
                 with open(f"reports/{report_path}", "w", encoding="utf-8") as file:
                     file.write(data)
                     sys.exit(0)
-            except Exception:
+            except OSError:
                 raise FileAccessError(report_path)
         else:
             print(data)

@@ -1,20 +1,17 @@
-import pathlib
 import json
+import pathlib
 
 from . import constants
-
-from .constants import DATA, SUPPORTED_FORMATS, TOP_K
-from .errors import WrongFormatError, UnsupportedFormatError
-from .parsers import parse_csv, parse_jsonl
 from .analysis import analyze, invalid_analyze
+from .constants import DATA, SUPPORTED_FORMATS, TOP_K
+from .errors import UnsupportedFormatError, WrongFormatError
+from .parsers import parse_csv, parse_jsonl
 
 
 def report(inputs, skip_invalid, formats):
     data = DATA
-    file_number = 0
 
-    for file in inputs:
-        file_number += 1
+    for file_number, file in inputs:
         path = pathlib.Path(file)
         file_format = path.suffix.strip(".")
         if file_format not in formats and file_format in SUPPORTED_FORMATS:
