@@ -1,15 +1,15 @@
 import pathlib
 import json
 
-from .constants import DATA, SUPPORTED_FORMATS, TOP_K
+from . import constants
+
+from .constants import DATA, SUPPORTED_FORMATS, TOP_K, INVALID_LINES
 from .errors import WrongFormatError, UnsupportedFormatError
 from .parsers import parse_csv, parse_jsonl
 from .analysis import analyze, invalid_analyze
 
-invalid_lines = 0
 
 def report(inputs, skip_invalid, formats):
-    global invalid_lines
     data = DATA
     file_number = 0
 
@@ -34,6 +34,6 @@ def report(inputs, skip_invalid, formats):
             key=lambda item: (-item[1], item[0])
         )[:TOP_K])
 
-    invalid_analyze(data, skip_invalid, invalid_lines)
+    invalid_analyze(data, skip_invalid, constants.INVALID_LINES)
 
     return json.dumps(data, indent=4)
