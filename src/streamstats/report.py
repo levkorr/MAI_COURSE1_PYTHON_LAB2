@@ -9,8 +9,8 @@ from .parsers import parse_csv, parse_jsonl
 
 
 def report(inputs, skip_invalid, formats):
-    data = DATA
-
+    data = DATA.copy()
+    constants.INVALID_LINES=0
     for file_number, file in enumerate(inputs):
         path = pathlib.Path(file)
         file_format = path.suffix.strip(".")

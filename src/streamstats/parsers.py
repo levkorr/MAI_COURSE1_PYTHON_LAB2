@@ -40,7 +40,6 @@ def make_event(data):
 
 def parse_jsonl(path, skip_invalid, file_number):
     with open(path, "r", encoding="utf-8") as file:
-
         for line_number, line in enumerate(file):
 
             try:

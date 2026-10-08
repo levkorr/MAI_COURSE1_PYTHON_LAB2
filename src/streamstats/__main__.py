@@ -2,10 +2,12 @@ import argparse
 import pathlib
 import sys
 
+from . import constants
 from .errors import FileAccessError, StreamStatsError
 from .parsers import *
 from .report import report
 
+invalid_lines = 0
 # python -m streamstats analyze data/events.jsonl data/events.csv --format jsonl csv
 # python -m streamstats analyze data/empty.jsonl data/events_comma.csv data/events_copy.jsonl data/events_semicolon.csv data/events_tab.csv data/events.jsonl data/invalid_events.jsonl --format jsonl csv --skip-invalid --output report.json
 
