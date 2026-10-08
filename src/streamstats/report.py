@@ -1,8 +1,8 @@
 import json
 import pathlib
 import copy
-from . import constants
-from .analysis import analyze, invalid_analyze
+
+from .analysis import analyze
 from .constants import STATS, SUPPORTED_FORMATS, TOP_K
 from .errors import UnsupportedFormatError, WrongFormatError
 from .parsers import parse_csv, parse_jsonl
@@ -32,6 +32,6 @@ def report(inputs, skip_invalid, formats):
         )[:TOP_K])
 
     if not skip_invalid:
-        stats.popitem()
+        stats.pop("invalid_lines", None)
 
     return json.dumps(stats, indent=4)

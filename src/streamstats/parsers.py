@@ -25,7 +25,7 @@ def validate_event(data, file_number, line_number):
     if not isinstance(raw_source, str) or not raw_source.strip():
         raise InvalidEventError(file_number, line_number)
     # message
-    if not isinstance(raw_message, str) or not raw_message.strip():
+    if not isinstance(raw_message, str):
         raise InvalidEventError(file_number, line_number)
 
 
