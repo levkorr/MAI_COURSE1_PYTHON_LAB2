@@ -22,9 +22,8 @@ def parse_help():
         Options:
             --format FORMAT [FORMAT, ...]       File formats (required)
             --output FILE                       Save JSON report to FILE
-                                                (by default saves to )
+                                                (by default prints to terminal)
             --skip-invalid                      Skip invalid events instead of stopping
-            
         
         Support:
             Analysis of multiple files
