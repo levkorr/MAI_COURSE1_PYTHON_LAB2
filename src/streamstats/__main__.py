@@ -1,13 +1,19 @@
 import argparse
+import copy
+import json
 import pathlib
 import sys
 
-from .errors import FileAccessError, StreamStatsError
+from .analysis import analyze
+from .constants import STATS, SUPPORTED_FORMATS, TOP_K
+from .errors import StreamStatsError, UnsupportedFormatError, WrongFormatError
+from .parsers import parse_csv, parse_jsonl
 from .report import report
 
-invalid_lines = 0
+
 # python -m streamstats analyze data/events.jsonl data/events.csv --format jsonl csv
 # python -m streamstats analyze data/empty.jsonl data/events_comma.csv data/events_copy.jsonl data/events_semicolon.csv data/events_tab.csv data/events.jsonl data/invalid_events.jsonl --format jsonl csv --skip-invalid --output report.json
+
 
 def parse_help():
     if "--help" in sys.argv:
@@ -47,6 +53,7 @@ def parse_help():
             python -m streamstats analyze INPUT --format csv --skip-invalid
         """)
         sys.exit(0)
+
 
 def parse():
     ''' Модуль создающий парсер
@@ -88,19 +95,36 @@ def main():
         report_path = args.report_path
         skip_invalid = args.skip_invalid
         # Запуск парсера
-        stats = report(inputs, skip_invalid, formats)
-        # Вывод в терминал или в определенное место
 
-        if report_path:
-            try:
-                pathlib.Path("reports").mkdir(exist_ok=True)
-                with open(f"reports/{report_path}", "w", encoding="utf-8") as file:
-                    file.write(stats)
-                    sys.exit(0)
-            except OSError:
-                raise FileAccessError(report_path)
-        else:
-            print(stats)
+        stats = copy.deepcopy(STATS)
+
+        for file_number, file in enumerate(inputs):
+            path = pathlib.Path(file)
+            file_format = path.suffix.strip(".")
+            if file_format not in formats and file_format in SUPPORTED_FORMATS:
+                raise WrongFormatError(path.suffix.strip("."))
+            if file_format == "jsonl":
+                for event in parse_jsonl(path, skip_invalid, file_number, stats):
+                    stats = analyze(event, stats)
+
+            elif file_format == "csv":
+                for event in parse_csv(path, skip_invalid, file_number, stats):
+                    stats = analyze(event, stats)
+            else:
+                raise UnsupportedFormatError(file_format)
+
+        stats["top_error_sources"] = dict(
+            sorted(
+                stats["top_error_sources"].items(),
+                key=lambda item: (-item[1], item[0])
+            )[:TOP_K])
+
+        if not skip_invalid:
+            stats.pop("invalid_lines", None)
+
+        stats = json.dumps(stats, indent=4)
+
+        report(stats, report_path)
 
 
 if __name__ == "__main__":

@@ -17,9 +17,11 @@ class InvalidEventError(StreamStatsError):
         super().__init__(
             f"Invalid event: file number: {file_number}, line number: {line_number}")
 
+
 class FileAccessError(StreamStatsError):
     def __init__(self, report_path):
         super().__init__(f"Can't access file: {report_path}")
+
 
 class InvalidDelimeterError(StreamStatsError):
     def __init__(self, file_number):

@@ -6,6 +6,7 @@ from datetime import datetime
 from .constants import LEVELS
 from .errors import InvalidDelimeterError, InvalidEventError
 
+logger = logging.getLogger(__name__)
 
 def validate_event(data, file_number, line_number):
     raw_timestamp = data.get("timestamp")
@@ -48,8 +49,9 @@ def parse_jsonl(path, skip_invalid, file_number, stats):
                 yield make_event(data)
             except (InvalidEventError, json.JSONDecodeError):
                 if skip_invalid:
-                    stats["invalid_lines"]+=1
-                    logging.warning(f"Invalid Event: file number: {file_number+1}, line number: {line_number+1}")
+                    stats["invalid_lines"] += 1
+                    logger.warning(
+                        f"Invalid Event: file number: {file_number+1}, line number: {line_number+1}")
                 else:
                     raise InvalidEventError(file_number+1, line_number+1)
 
@@ -76,7 +78,8 @@ def parse_csv(path, skip_invalid, file_number, stats):
                 yield make_event(data)
             except InvalidEventError:
                 if skip_invalid:
-                    stats["invalid_lines"]+=1
-                    logging.warning(f"Invalid Event: file number: {file_number+1}, line number: {line_number+1}")
+                    stats["invalid_lines"] += 1
+                    logger.warning(
+                        f"Invalid Event: file number: {file_number+1}, line number: {line_number+1}")
                 else:
                     raise InvalidEventError(file_number+1, line_number+1)
