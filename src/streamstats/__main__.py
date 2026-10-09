@@ -2,7 +2,6 @@ import argparse
 import pathlib
 import sys
 
-from . import constants
 from .errors import FileAccessError, StreamStatsError
 from .report import report
 
@@ -89,24 +88,25 @@ def main():
         report_path = args.report_path
         skip_invalid = args.skip_invalid
         # Запуск парсера
-        data = report(inputs, skip_invalid, formats)
+        stats = report(inputs, skip_invalid, formats)
         # Вывод в терминал или в определенное место
+
         if report_path:
             try:
                 pathlib.Path("reports").mkdir(exist_ok=True)
                 with open(f"reports/{report_path}", "w", encoding="utf-8") as file:
-                    file.write(data)
+                    file.write(stats)
                     sys.exit(0)
             except OSError:
                 raise FileAccessError(report_path)
         else:
-            print(data)
-            sys.exit(0)
+            print(stats)
 
 
 if __name__ == "__main__":
     try:
         main()
+        sys.exit(0)
     except StreamStatsError as e:
         print(f"Expected error: {e}", file=sys.stderr)
         sys.exit(2)
