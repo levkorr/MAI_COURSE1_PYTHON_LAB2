@@ -18,9 +18,9 @@ class InvalidEventError(StreamStatsError):
             f"Invalid event: file number: {file_number}, line number: {line_number}")
 
 
-class FileAccessError(StreamStatsError):
+class ReportFileError(StreamStatsError):
     def __init__(self, report_path):
-        super().__init__(f"Can't access file: {report_path}")
+        super().__init__(f"Can't write report to file: {report_path}")
 
 
 class InvalidDelimeterError(StreamStatsError):

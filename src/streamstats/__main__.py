@@ -16,6 +16,14 @@ from .report import report
 
 
 def parse_help():
+    ''' Модуль выводящий help при аргументе --help
+
+    Args:
+        None
+
+    Returns:
+        None
+    '''
     if "--help" in sys.argv:
         print("""
         Streamstats - csv and jsonl file streaming analyzer
@@ -86,6 +94,20 @@ def parse():
 
 
 def main():
+    ''' Являетсе единственным входом и выходом программы
+    Обрабатывает ввод в CLI, входные аргументы
+    Отвечает за запуск нужных функций
+    Хранит основную логику analyze
+
+    Args:
+        None
+
+    Returns:
+        None
+
+    Raises:
+        StreamstatsError: При ожидаемой ошибке
+    '''
     parse_help()
     args = parse()
     if args.command == "analyze":
@@ -94,22 +116,24 @@ def main():
         formats = args.formats
         report_path = args.report_path
         skip_invalid = args.skip_invalid
-        # Запуск парсера
 
+        # Запуск парсера
         stats = copy.deepcopy(STATS)
 
         for file_number, file in enumerate(inputs):
             path = pathlib.Path(file)
             file_format = path.suffix.strip(".")
+
             if file_format not in formats and file_format in SUPPORTED_FORMATS:
                 raise WrongFormatError(path.suffix.strip("."))
+            
             if file_format == "jsonl":
                 for event in parse_jsonl(path, skip_invalid, file_number, stats):
                     stats = analyze(event, stats)
-
             elif file_format == "csv":
                 for event in parse_csv(path, skip_invalid, file_number, stats):
                     stats = analyze(event, stats)
+
             else:
                 raise UnsupportedFormatError(file_format)
 

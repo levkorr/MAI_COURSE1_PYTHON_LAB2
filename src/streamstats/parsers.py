@@ -8,7 +8,21 @@ from .errors import InvalidDelimeterError, InvalidEventError
 
 logger = logging.getLogger(__name__)
 
+
 def validate_event(data, file_number, line_number):
+    ''' Проводит валидацию события
+
+    Args:
+        data: Данные строки из файла
+        file_number: Номер читаемого файла
+        line_number: Номер читаемой строки из файла
+
+    Returns:
+        None
+
+    Raises:
+        InvalidEventError: Если событие неправильно
+    '''
     raw_timestamp = data.get("timestamp")
     raw_level = data.get("level")
     raw_source = data.get("source")
@@ -31,6 +45,14 @@ def validate_event(data, file_number, line_number):
 
 
 def make_event(data):
+    ''' Создает событие по данным
+
+    Args:
+        data: Данные строки из файла
+
+    Returns:
+        Словарь содержащий событие
+    '''
     return {
         "timestamp": data.get("timestamp"),
         "level": data.get("level"),
@@ -40,6 +62,23 @@ def make_event(data):
 
 
 def parse_jsonl(path, skip_invalid, file_number, stats):
+    ''' Обрабатывает файл jsonl
+
+    Args:
+        path: Путь к файлу
+        skip_invalid: Пропуск неправильного файла
+        file_number: Номер читаемого файла
+        stats: Итоговая статистика
+
+    Returns:
+        None
+
+    Yields:
+        make_event(data): Созданное событие из строки
+
+    Raises:
+        InvalidEventError: Если событие неправильно
+    '''
     with open(path, "r", encoding="utf-8") as file:
         for line_number, line in enumerate(file):
 
@@ -57,6 +96,24 @@ def parse_jsonl(path, skip_invalid, file_number, stats):
 
 
 def parse_csv(path, skip_invalid, file_number, stats):
+    ''' Обрабатывает файл csv
+
+    Args:
+        path: Путь к файлу
+        skip_invalid: Пропуск неправильного файла
+        file_number: Номер читаемого файла
+        stats: Итоговая статистика
+
+    Returns:
+        None
+
+    Yields:
+        make_event(data): Созданное событие из строки
+
+    Raises:
+        InvalidDelimeterError: Если неправильный разделитель в файле
+        InvalidEventError: Если событие неправильно
+    '''
     with open(path, "r", encoding="utf-8", newline="") as file:
 
         try:

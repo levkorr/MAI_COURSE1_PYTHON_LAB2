@@ -2,6 +2,15 @@ from datetime import datetime
 
 
 def analyze(event, stats):
+    ''' Анализирует данные из события для создания статистики
+
+    Args:
+        event: Анализируемое событие
+        stats: Промежуточная статистика
+
+    Returns:
+        stats: Промежуточная статистика
+    '''
     stats["total_events"] += 1
     stats["by_level"][event["level"]] += 1
     if event["level"] == "ERROR" or event["level"] == "CRITICAL":
