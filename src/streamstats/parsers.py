@@ -154,14 +154,8 @@ def parse_csv(path, skip_invalid, file_number, stats):
         reader = csv.DictReader(file, dialect=delimiter)
 
         for line_number, data in enumerate(reader):
-
-            try:
-                validate_event(data, file_number+1, line_number+1)
+            
+            if validate_event(data, file_number+1, line_number+1, skip_invalid, stats):
                 yield make_event(data)
-            except InvalidEventError:
-                if skip_invalid:
-                    stats["invalid_lines"] += 1
-                    logger.warning(
-                        f"Invalid Event: file number: {file_number+1}, line number: {line_number+1}")
-                else:
-                    raise InvalidEventError(file_number+1, line_number+1)
+            else:
+                pass

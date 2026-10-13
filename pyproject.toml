@@ -1,0 +1,27 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "toolkit"
+version = "0.10.1"
+description = "Python package with a CLI with a calculator and a unit converter"
+readme = "README.md"
+requires-python = ">=3.10"
+authors = [{name = "Leo Korolyov", email = "lev@fossko.ru"}]
+
+[project.urls]
+Homepage = "https://github.com/levkorr/MAI_COURSE1_PYTHON_LAB1"
+Issues = "https://github.com/levkorr/MAI_COURSE1_PYTHON_LAB1/issues"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.setuptools.package-data]
+toolkit = ["config_units.json"]
+
+[project.optional-dependencies]
+dev = [
+    "pytest==9.1.1",
+    "ruff==0.16.8"
+]
