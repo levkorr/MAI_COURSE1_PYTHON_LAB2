@@ -4,12 +4,12 @@ import logging
 from datetime import datetime
 
 from .constants import LEVELS
-from .errors import InvalidDelimeterError, InvalidEventError
+from .errors import InvalidDelimeterError, InvalidEventError, InvalidEventTimestampError, InvalidEventMessageError, InvalidEventSourceError, InvalidEventLevelError
 
 logger = logging.getLogger(__name__)
 
 
-def validate_event(data, file_number, line_number):
+def validate_event(data, file_number, line_number, skip_invalid, stats):
     ''' Проводит валидацию события
 
     Args:
@@ -32,17 +32,41 @@ def validate_event(data, file_number, line_number):
     try:
         datetime.fromisoformat(raw_timestamp)
     except (ValueError, TypeError):
-        raise InvalidEventError(file_number, line_number)
+        if skip_invalid:
+            stats["invalid_lines"] += 1
+            logger.warning(
+                        f"Invalid event timestamp: file number: {file_number+1}, line number: {line_number+1}")
+            return False
+        else:
+            raise InvalidEventTimestampError(file_number, line_number)
     # level
     if raw_level not in LEVELS:
-        raise InvalidEventError(file_number, line_number)
+        if skip_invalid:
+            stats["invalid_lines"] += 1
+            logger.warning(
+                f"Invalid event levels: file number: {file_number+1}, line number: {line_number+1}")
+            return False
+        else:
+            raise InvalidEventLevelError(file_number, line_number)
     # source
     if not isinstance(raw_source, str) or not raw_source.strip():
-        raise InvalidEventError(file_number, line_number)
+        if skip_invalid:
+            stats["invalid_lines"] += 1
+            logger.warning(
+                f"Invalid event source: file number: {file_number+1}, line number: {line_number+1}")
+            return False
+        else:
+            raise InvalidEventSourceError(file_number, line_number)
     # message
     if not isinstance(raw_message, str):
-        raise InvalidEventError(file_number, line_number)
-
+        if skip_invalid:
+            stats["invalid_lines"] += 1
+            logger.warning(
+                f"Invalid event message: file number: {file_number+1}, line number: {line_number+1}")
+            return False
+        else:
+            raise InvalidEventMessageError(file_number, line_number)
+    return True
 
 def make_event(data):
     ''' Создает событие по данным
@@ -84,16 +108,17 @@ def parse_jsonl(path, skip_invalid, file_number, stats):
 
             try:
                 data = json.loads(line)
-                validate_event(data, file_number+1, line_number+1)
-                yield make_event(data)
-            except (InvalidEventError, json.JSONDecodeError):
+            except json.JSONDecodeError:
                 if skip_invalid:
                     stats["invalid_lines"] += 1
                     logger.warning(
                         f"Invalid Event: file number: {file_number+1}, line number: {line_number+1}")
                 else:
                     raise InvalidEventError(file_number+1, line_number+1)
-
+            if validate_event(data, file_number+1, line_number+1, skip_invalid, stats):
+                yield make_event(data)
+            else:
+                pass
 
 def parse_csv(path, skip_invalid, file_number, stats):
     ''' Обрабатывает файл csv

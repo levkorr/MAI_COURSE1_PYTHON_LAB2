@@ -17,6 +17,25 @@ class InvalidEventError(StreamStatsError):
         super().__init__(
             f"Invalid event: file number: {file_number}, line number: {line_number}")
 
+class InvalidEventTimestampError(StreamStatsError):
+    def __init__(self, file_number, line_number):
+        super().__init__(
+            f"Invalid event timestamp: file number: {file_number}, line number: {line_number}")
+
+class InvalidEventLevelError(StreamStatsError):
+    def __init__(self, file_number, line_number):
+        super().__init__(
+            f"Invalid event level: file number: {file_number}, line number: {line_number}")
+
+class InvalidEventSourceError(StreamStatsError):
+    def __init__(self, file_number, line_number):
+        super().__init__(
+            f"Invalid event source: file number: {file_number}, line number: {line_number}")
+
+class InvalidEventMessageError(StreamStatsError):
+    def __init__(self, file_number, line_number):
+        super().__init__(
+            f"Invalid event message: file number: {file_number}, line number: {line_number}")
 
 class ReportFileError(StreamStatsError):
     def __init__(self, report_path):
