@@ -4,7 +4,7 @@ import logging
 from datetime import datetime
 
 from .constants import LEVELS
-from .errors import InvalidDelimeterError, InvalidEventError, InvalidEventTimestampError, InvalidEventMessageError, InvalidEventSourceError, InvalidEventLevelError
+from .errors import InvalidDelimiterError, InvalidEventError, InvalidEventTimestampError, InvalidEventMessageError, InvalidEventSourceError, InvalidEventLevelError
 
 logger = logging.getLogger(__name__)
 
@@ -35,7 +35,7 @@ def validate_event(data, file_number, line_number, skip_invalid, stats):
         if skip_invalid:
             stats["invalid_lines"] += 1
             logger.warning(
-                        f"Invalid event timestamp: file number: {file_number+1}, line number: {line_number+1}")
+                f"Invalid event timestamp: file number: {file_number}, line number: {line_number}")
             return False
         else:
             raise InvalidEventTimestampError(file_number, line_number)
@@ -44,7 +44,7 @@ def validate_event(data, file_number, line_number, skip_invalid, stats):
         if skip_invalid:
             stats["invalid_lines"] += 1
             logger.warning(
-                f"Invalid event levels: file number: {file_number+1}, line number: {line_number+1}")
+                f"Invalid event levels: file number: {file_number}, line number: {line_number}")
             return False
         else:
             raise InvalidEventLevelError(file_number, line_number)
@@ -53,7 +53,7 @@ def validate_event(data, file_number, line_number, skip_invalid, stats):
         if skip_invalid:
             stats["invalid_lines"] += 1
             logger.warning(
-                f"Invalid event source: file number: {file_number+1}, line number: {line_number+1}")
+                f"Invalid event source: file number: {file_number}, line number: {line_number}")
             return False
         else:
             raise InvalidEventSourceError(file_number, line_number)
@@ -62,11 +62,12 @@ def validate_event(data, file_number, line_number, skip_invalid, stats):
         if skip_invalid:
             stats["invalid_lines"] += 1
             logger.warning(
-                f"Invalid event message: file number: {file_number+1}, line number: {line_number+1}")
+                f"Invalid event message: file number: {file_number}, line number: {line_number}")
             return False
         else:
             raise InvalidEventMessageError(file_number, line_number)
     return True
+
 
 def make_event(data):
     ''' Создает событие по данным
@@ -104,21 +105,20 @@ def parse_jsonl(path, skip_invalid, file_number, stats):
         InvalidEventError: Если событие неправильно
     '''
     with open(path, "r", encoding="utf-8") as file:
-        for line_number, line in enumerate(file):
-
+        for line_number, line in enumerate(file, start=1):
             try:
                 data = json.loads(line)
             except json.JSONDecodeError:
                 if skip_invalid:
                     stats["invalid_lines"] += 1
                     logger.warning(
-                        f"Invalid Event: file number: {file_number+1}, line number: {line_number+1}")
+                        f"Invalid Event: file number: {file_number}, line number: {line_number}")
+                    continue
                 else:
-                    raise InvalidEventError(file_number+1, line_number+1)
-            if validate_event(data, file_number+1, line_number+1, skip_invalid, stats):
+                    raise InvalidEventError(file_number, line_number)
+            if validate_event(data, file_number, line_number, skip_invalid, stats):
                 yield make_event(data)
-            else:
-                pass
+
 
 def parse_csv(path, skip_invalid, file_number, stats):
     ''' Обрабатывает файл csv
@@ -149,13 +149,11 @@ def parse_csv(path, skip_invalid, file_number, stats):
 
             delimiter = csv.Sniffer().sniff(sample, delimiters=",;\t")
         except csv.Error:
-            raise InvalidDelimeterError(file_number)
+            raise InvalidDelimiterError(file_number)
 
         reader = csv.DictReader(file, dialect=delimiter)
 
-        for line_number, data in enumerate(reader):
-            
-            if validate_event(data, file_number+1, line_number+1, skip_invalid, stats):
+        for line_number, data in enumerate(reader, start=2):
+
+            if validate_event(data, file_number, line_number, skip_invalid, stats):
                 yield make_event(data)
-            else:
-                pass

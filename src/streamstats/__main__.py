@@ -120,13 +120,13 @@ def main():
         # Запуск парсера
         stats = copy.deepcopy(STATS)
 
-        for file_number, file in enumerate(inputs):
+        for file_number, file in enumerate(inputs, start=1):
             path = pathlib.Path(file)
             file_format = path.suffix.strip(".")
 
             if file_format not in formats and file_format in SUPPORTED_FORMATS:
                 raise WrongFormatError(path.suffix.strip("."))
-            
+
             if file_format == "jsonl":
                 for event in parse_jsonl(path, skip_invalid, file_number, stats):
                     stats = analyze(event, stats)
