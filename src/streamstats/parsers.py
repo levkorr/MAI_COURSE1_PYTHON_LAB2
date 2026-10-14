@@ -4,7 +4,14 @@ import logging
 from datetime import datetime
 
 from .constants import LEVELS
-from .errors import InvalidDelimiterError, InvalidEventError, InvalidEventTimestampError, InvalidEventMessageError, InvalidEventSourceError, InvalidEventLevelError
+from .errors import (
+    InvalidDelimiterError,
+    InvalidEventError,
+    InvalidEventLevelError,
+    InvalidEventMessageError,
+    InvalidEventSourceError,
+    InvalidEventTimestampError,
+)
 
 logger = logging.getLogger(__name__)
 

@@ -50,3 +50,7 @@ class ReportFileError(StreamStatsError):
 class InvalidDelimiterError(StreamStatsError):
     def __init__(self, file_number):
         super().__init__(f"Invalid Delimiter: file number: {file_number}")
+
+class InvalidCLIArgumentsError(StreamStatsError):
+        def __init__(self):
+            super().__init__(f"Invalid arguments, try:\n\npython -m streamstats --help")

@@ -3,13 +3,14 @@ import copy
 import json
 import pathlib
 import sys
+import contextlib
+import io
 
 from .analysis import analyze
 from .constants import STATS, SUPPORTED_FORMATS, TOP_K
-from .errors import StreamStatsError, UnsupportedFormatError, WrongFormatError
+from .errors import StreamStatsError, UnsupportedFormatError, WrongFormatError, InvalidCLIArgumentsError
 from .parsers import parse_csv, parse_jsonl
 from .report import report
-
 
 # python -m streamstats analyze data/events.jsonl data/events.csv --format jsonl csv
 # python -m streamstats analyze data/empty.jsonl data/events_comma.csv data/events_copy.jsonl data/events_semicolon.csv data/events_tab.csv data/events.jsonl data/invalid_events.jsonl --format jsonl csv --skip-invalid --output report.json
@@ -109,7 +110,11 @@ def main():
         StreamstatsError: При ожидаемой ошибке
     '''
     parse_help()
-    args = parse()
+    try:
+        with contextlib.redirect_stderr(io.StringIO()):
+            args = parse()
+    except SystemExit:
+        raise InvalidCLIArgumentsError()
     if args.command == "analyze":
         # Чтение аргументов
         inputs = args.inputs
