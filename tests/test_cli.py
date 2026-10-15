@@ -74,4 +74,4 @@ def test_cli_help(capsys):
     with pytest.raises(SystemExit) as error:
         main()
     assert error.value.code == 0
-    assert "Streamstats" in capsys.readouterr().out
+    assert "Streamstats - csv and jsonl file streaming analyzer" in capsys.readouterr().out

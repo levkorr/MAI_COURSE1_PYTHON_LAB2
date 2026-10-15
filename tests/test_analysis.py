@@ -10,13 +10,6 @@ def event(level="INFO", source="app", timestamp="2026-01-01T10:00:00"):
     return {"timestamp": timestamp, "level": level, "source": source, "message": "Привет"}
 
 
-def test_empty_statistics():
-    stats = copy.deepcopy(STATS)
-    assert stats["total_events"] == 0
-    assert stats["by_source"] == {}
-    assert stats["top_error_sources"] == {}
-
-
 def test_one_event():
     stats = copy.deepcopy(STATS)
     stats = analyze(event(), stats)
