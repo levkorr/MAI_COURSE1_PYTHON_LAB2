@@ -16,5 +16,5 @@ STATS = {
     },
     "first_timestamp": "",
     "last_timestamp": "",
-    "invalid_lines": 0
+    "invalid_events": 0
 }

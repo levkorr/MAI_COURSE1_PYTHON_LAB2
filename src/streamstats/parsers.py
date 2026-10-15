@@ -37,7 +37,7 @@ def validate_event(data, file_number, line_number, skip_invalid, stats):
         raw_message = data.get("message")
     else:
         if skip_invalid:
-            stats["invalid_lines"] += 1
+            stats["invalid_events"] += 1
             logger.warning(
                 f"WARNING: Invalid event timestamp: file number: {file_number}, line number: {line_number}")
             return False
@@ -47,7 +47,7 @@ def validate_event(data, file_number, line_number, skip_invalid, stats):
         datetime.fromisoformat(raw_timestamp)
     except (ValueError, TypeError):
         if skip_invalid:
-            stats["invalid_lines"] += 1
+            stats["invalid_events"] += 1
             logger.warning(
                 f"WARNING: Invalid event timestamp: file number: {file_number}, line number: {line_number}")
             return False
@@ -55,7 +55,7 @@ def validate_event(data, file_number, line_number, skip_invalid, stats):
     # level
     if raw_level not in LEVELS:
         if skip_invalid:
-            stats["invalid_lines"] += 1
+            stats["invalid_events"] += 1
             logger.warning(
                 f"WARNING: Invalid event levels: file number: {file_number}, line number: {line_number}")
             return False
@@ -63,7 +63,7 @@ def validate_event(data, file_number, line_number, skip_invalid, stats):
     # source
     if not isinstance(raw_source, str) or not raw_source.strip():
         if skip_invalid:
-            stats["invalid_lines"] += 1
+            stats["invalid_events"] += 1
             logger.warning(
                 f"WARNING: Invalid event source: file number: {file_number}, line number: {line_number}")
             return False
@@ -71,7 +71,7 @@ def validate_event(data, file_number, line_number, skip_invalid, stats):
     # message
     if not isinstance(raw_message, str):
         if skip_invalid:
-            stats["invalid_lines"] += 1
+            stats["invalid_events"] += 1
             logger.warning(
                 f"WARNING: Invalid event message: file number: {file_number}, line number: {line_number}")
             return False
@@ -120,7 +120,7 @@ def parse_jsonl(path, skip_invalid, file_number, stats):
                 data = json.loads(line)
             except json.JSONDecodeError:
                 if skip_invalid:
-                    stats["invalid_lines"] += 1
+                    stats["invalid_events"] += 1
                     logger.warning(
                         f"WARNING: Invalid Event: file number: {file_number}, line number: {line_number}")
                     continue

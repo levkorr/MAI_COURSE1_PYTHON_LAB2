@@ -155,7 +155,7 @@ def main():
             )[:TOP_K])
 
         if not skip_invalid:
-            stats.pop("invalid_lines", None)
+            stats.pop("invalid_events", None)
 
         stats = json.dumps(stats, indent=4)
 
