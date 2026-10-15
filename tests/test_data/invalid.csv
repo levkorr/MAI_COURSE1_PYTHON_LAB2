@@ -1,0 +1,4 @@
+timestamp,level,source,message
+2026-01-01T10:00:00,INFO,api,Привет
+2026-01-01T10:30:00,BAD,app,Ошибка уровня
+2026-01-01T11:00:00,ERROR,api,Ошибка

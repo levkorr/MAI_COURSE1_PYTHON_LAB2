@@ -1,0 +1,6 @@
+{"timestamp": "2026-01-01T10:00:00", "level": "ERROR", "source": "f", "message": "Ошибка"}
+{"timestamp": "2026-01-01T10:00:01", "level": "ERROR", "source": "c", "message": "Ошибка"}
+{"timestamp": "2026-01-01T10:00:02", "level": "ERROR", "source": "b", "message": "Ошибка"}
+{"timestamp": "2026-01-01T10:00:03", "level": "ERROR", "source": "a", "message": "Ошибка"}
+{"timestamp": "2026-01-01T10:00:04", "level": "ERROR", "source": "e", "message": "Ошибка"}
+{"timestamp": "2026-01-01T10:00:05", "level": "ERROR", "source": "d", "message": "Ошибка"}
