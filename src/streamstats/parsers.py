@@ -30,11 +30,18 @@ def validate_event(data, file_number, line_number, skip_invalid, stats):
     Raises:
         InvalidEventError: Если событие неправильно
     '''
-    raw_timestamp = data.get("timestamp")
-    raw_level = data.get("level")
-    raw_source = data.get("source")
-    raw_message = data.get("message")
-
+    if isinstance(data, dict):
+        raw_timestamp = data.get("timestamp")
+        raw_level = data.get("level")
+        raw_source = data.get("source")
+        raw_message = data.get("message")
+    else:
+        if skip_invalid:
+            stats["invalid_lines"] += 1
+            logger.warning(
+                f"WARNING: Invalid event timestamp: file number: {file_number}, line number: {line_number}")
+            return False
+        raise InvalidEventError(file_number, line_number)
     # timestamp
     try:
         datetime.fromisoformat(raw_timestamp)

@@ -59,7 +59,7 @@ ruff check .
 ## Структура проекта
 
 ```text
-lab_01/
+lab_02/
   src/streamstats/
     __init__.py
     __main__.py
@@ -83,7 +83,7 @@ lab_01/
     __init__.py
     test_analysis.py
     test_cli.py
-    test_parser.py
+    test_parsers.py
   .gitignore
   pyproject.toml
   pytest.ini
@@ -103,11 +103,11 @@ lab_01/
 - **constants.py** - Содержит константы
 - **report.py** - Содержит логику сохранения отчета
 
-#### Тестирование ДОПИСАТЬ ДОПИСАТЬ
+#### Тестирование
 - **test_data** - Папка с файлами для тестирования
-- **test_analysis** - Тестирование анализатора
-- **test_cli** - Тестирование CLI
-- **test_parsers** - Тестирование парсеров
+- **test_analysis.py** - Тестирование анализатора
+- **test_cli.py** - Тестирование CLI
+- **test_parsers.py** - Тестирование парсеров
 
 ## Методика
 

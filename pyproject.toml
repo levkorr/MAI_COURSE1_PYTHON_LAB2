@@ -17,9 +17,6 @@ Issues = "https://github.com/levkorr/MAI_COURSE1_PYTHON_LAB2/issues"
 [tool.setuptools.packages.find]
 where = ["src"]
 
-[tool.setuptools.package-data]
-streamstats = ["config_units.json"]
-
 [project.optional-dependencies]
 dev = [
     "pytest==9.1.1",

@@ -127,6 +127,10 @@ def main():
         # Запуск парсера
         stats = copy.deepcopy(STATS)
 
+        for format in formats:
+            if format not in SUPPORTED_FORMATS:
+                raise UnsupportedFormatError(format)
+
         for file_number, file in enumerate(inputs, start=1):
             path = pathlib.Path(file)
             file_format = path.suffix.strip(".")
