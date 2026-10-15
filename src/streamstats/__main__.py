@@ -17,9 +17,6 @@ from .errors import (
 from .parsers import parse_csv, parse_jsonl
 from .report import report
 
-# python -m streamstats analyze data/events.jsonl data/events.csv --format jsonl csv
-# python -m streamstats analyze data/empty.jsonl data/events_comma.csv data/events_copy.jsonl data/events_semicolon.csv data/events_tab.csv data/events.jsonl data/invalid_events.jsonl --format jsonl csv --skip-invalid --output report.json
-
 
 def parse_help():
     ''' Модуль выводящий help при аргументе --help
