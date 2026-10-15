@@ -53,4 +53,4 @@ class InvalidDelimiterError(StreamStatsError):
 
 class InvalidCLIArgumentsError(StreamStatsError):
         def __init__(self):
-            super().__init__(f"Invalid arguments, try:\n\npython -m streamstats --help")
+            super().__init__("Invalid arguments, try:\n\npython -m streamstats --help")

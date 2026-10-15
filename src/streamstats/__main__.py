@@ -1,14 +1,19 @@
 import argparse
+import contextlib
 import copy
+import io
 import json
 import pathlib
 import sys
-import contextlib
-import io
 
 from .analysis import analyze
 from .constants import STATS, SUPPORTED_FORMATS, TOP_K
-from .errors import StreamStatsError, UnsupportedFormatError, WrongFormatError, InvalidCLIArgumentsError
+from .errors import (
+    InvalidCLIArgumentsError,
+    StreamStatsError,
+    UnsupportedFormatError,
+    WrongFormatError,
+)
 from .parsers import parse_csv, parse_jsonl
 from .report import report
 

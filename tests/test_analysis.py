@@ -30,7 +30,8 @@ def test_levels(level):
     stats = copy.deepcopy(STATS)
     stats = analyze(event(level), stats)
     assert stats["by_level"][level] == 1
-    assert stats["top_error_sources"] == ({"app": 1} if level in ("ERROR", "CRITICAL") else {})
+    assert stats["top_error_sources"] == (
+        {"app": 1} if level in ("ERROR", "CRITICAL") else {})
 
 
 def test_first_and_last_timestamp():

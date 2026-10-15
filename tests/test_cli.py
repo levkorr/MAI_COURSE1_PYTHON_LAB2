@@ -1,17 +1,16 @@
 import json
 import sys
-from pathlib import Path
 
 import pytest
 
 from streamstats.__main__ import main
 from streamstats.errors import InvalidEventError
 
-
 # Успешные запуски
 
 def test_cli_valid_jsonl(capsys):
-    sys.argv = ["streamstats", "analyze", "tests/test_data/events.jsonl", "--format", "jsonl"]
+    sys.argv = ["streamstats", "analyze",
+                "tests/test_data/events.jsonl", "--format", "jsonl"]
     main()
     result = json.loads(capsys.readouterr().out)
     assert result["total_events"] == 3
@@ -20,7 +19,8 @@ def test_cli_valid_jsonl(capsys):
 
 
 def test_cli_valid_csv(capsys):
-    sys.argv = ["streamstats", "analyze", "tests/test_data/events.csv", "--format", "csv"]
+    sys.argv = ["streamstats", "analyze",
+                "tests/test_data/events.csv", "--format", "csv"]
     main()
     result = json.loads(capsys.readouterr().out)
     assert result["total_events"] == 3
@@ -28,7 +28,8 @@ def test_cli_valid_csv(capsys):
 
 
 def test_cli_multiple_files(capsys):
-    sys.argv = ["streamstats", "analyze", "tests/test_data/events.jsonl", "tests/test_data/events.csv", "--format", "jsonl", "csv"]
+    sys.argv = ["streamstats", "analyze", "tests/test_data/events.jsonl",
+                "tests/test_data/events.csv", "--format", "jsonl", "csv"]
     main()
     result = json.loads(capsys.readouterr().out)
     assert result["total_events"] == 6
@@ -36,13 +37,15 @@ def test_cli_multiple_files(capsys):
 
 
 def test_cli_empty_file(capsys):
-    sys.argv = ["streamstats", "analyze", "tests/test_data/empty.jsonl", "--format", "jsonl"]
+    sys.argv = ["streamstats", "analyze",
+                "tests/test_data/empty.jsonl", "--format", "jsonl"]
     main()
     assert json.loads(capsys.readouterr().out)["total_events"] == 0
 
 
 def test_cli_skip_invalid(capsys):
-    sys.argv = ["streamstats", "analyze", "tests/test_data/invalid.jsonl", "--format", "jsonl", "--skip-invalid"]
+    sys.argv = ["streamstats", "analyze", "tests/test_data/invalid.jsonl",
+                "--format", "jsonl", "--skip-invalid"]
     main()
     result = json.loads(capsys.readouterr().out)
     assert result["total_events"] == 2
@@ -50,7 +53,8 @@ def test_cli_skip_invalid(capsys):
 
 
 def test_cli_top_5(capsys):
-    sys.argv = ["streamstats", "analyze", "tests/test_data/top5.jsonl", "--format", "jsonl"]
+    sys.argv = ["streamstats", "analyze",
+                "tests/test_data/top5.jsonl", "--format", "jsonl"]
     main()
     result = json.loads(capsys.readouterr().out)
     assert list(result["top_error_sources"]) == ["a", "b", "c", "d", "e"]
@@ -59,7 +63,8 @@ def test_cli_top_5(capsys):
 # Неуспешные запуски
 
 def test_cli_invalid_line():
-    sys.argv = ["streamstats", "analyze", "tests/test_data/invalid.jsonl", "--format", "jsonl"]
+    sys.argv = ["streamstats", "analyze",
+                "tests/test_data/invalid.jsonl", "--format", "jsonl"]
     with pytest.raises(InvalidEventError, match="line number: 2"):
         main()
 
