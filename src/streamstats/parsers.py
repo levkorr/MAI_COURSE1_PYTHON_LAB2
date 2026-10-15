@@ -42,7 +42,7 @@ def validate_event(data, file_number, line_number, skip_invalid, stats):
         if skip_invalid:
             stats["invalid_lines"] += 1
             logger.warning(
-                f"Invalid event timestamp: file number: {file_number}, line number: {line_number}")
+                f"WARNING: Invalid event timestamp: file number: {file_number}, line number: {line_number}")
             return False
         else:
             raise InvalidEventTimestampError(file_number, line_number)
@@ -51,7 +51,7 @@ def validate_event(data, file_number, line_number, skip_invalid, stats):
         if skip_invalid:
             stats["invalid_lines"] += 1
             logger.warning(
-                f"Invalid event levels: file number: {file_number}, line number: {line_number}")
+                f"WARNING: Invalid event levels: file number: {file_number}, line number: {line_number}")
             return False
         else:
             raise InvalidEventLevelError(file_number, line_number)
@@ -60,7 +60,7 @@ def validate_event(data, file_number, line_number, skip_invalid, stats):
         if skip_invalid:
             stats["invalid_lines"] += 1
             logger.warning(
-                f"Invalid event source: file number: {file_number}, line number: {line_number}")
+                f"WARNING: Invalid event source: file number: {file_number}, line number: {line_number}")
             return False
         else:
             raise InvalidEventSourceError(file_number, line_number)
@@ -69,7 +69,7 @@ def validate_event(data, file_number, line_number, skip_invalid, stats):
         if skip_invalid:
             stats["invalid_lines"] += 1
             logger.warning(
-                f"Invalid event message: file number: {file_number}, line number: {line_number}")
+                f"WARNING: Invalid event message: file number: {file_number}, line number: {line_number}")
             return False
         else:
             raise InvalidEventMessageError(file_number, line_number)
@@ -119,7 +119,7 @@ def parse_jsonl(path, skip_invalid, file_number, stats):
                 if skip_invalid:
                     stats["invalid_lines"] += 1
                     logger.warning(
-                        f"Invalid Event: file number: {file_number}, line number: {line_number}")
+                        f"WARNING: Invalid Event: file number: {file_number}, line number: {line_number}")
                     continue
                 else:
                     raise InvalidEventError(file_number, line_number)
