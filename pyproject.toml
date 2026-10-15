@@ -3,22 +3,22 @@ requires = ["setuptools>=61.0"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "toolkit"
+name = "streamstats"
 version = "0.10.1"
-description = "Python package with a CLI with a calculator and a unit converter"
+description = "Python package with a CLI for stream file analysis"
 readme = "README.md"
 requires-python = ">=3.10"
 authors = [{name = "Leo Korolyov", email = "lev@fossko.ru"}]
 
 [project.urls]
-Homepage = "https://github.com/levkorr/MAI_COURSE1_PYTHON_LAB1"
-Issues = "https://github.com/levkorr/MAI_COURSE1_PYTHON_LAB1/issues"
+Homepage = "https://github.com/levkorr/MAI_COURSE1_PYTHON_LAB2"
+Issues = "https://github.com/levkorr/MAI_COURSE1_PYTHON_LAB2/issues"
 
 [tool.setuptools.packages.find]
 where = ["src"]
 
 [tool.setuptools.package-data]
-toolkit = ["config_units.json"]
+streamstats = ["config_units.json"]
 
 [project.optional-dependencies]
 dev = [

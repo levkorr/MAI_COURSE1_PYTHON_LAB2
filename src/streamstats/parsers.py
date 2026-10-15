@@ -42,6 +42,7 @@ def validate_event(data, file_number, line_number, skip_invalid, stats):
         if skip_invalid:
             stats["invalid_lines"] += 1
             logger.warning(
+                
                 f"WARNING: Invalid event timestamp: file number: {file_number}, line number: {line_number}")
             return False
         else:

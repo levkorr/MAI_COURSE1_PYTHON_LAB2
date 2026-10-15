@@ -48,8 +48,13 @@ ruff check .
 - `UnsupportedFormatError` - Файл имеет неподдерживаемое расширение
 - `WrongFormatError` - Указан неправильный формат файла в `--fomat`
 - `InvalidEventError` - Неправильное событие
+- `InvalidEventLevelError` - Неправильный уровень события
+- `InvalidEventSourceError` - Неправильный источник события
+- `InvalidEventMessageError` - Неправильное сообщение события
+- `InvalidEventTimestampError` - Неправильное время события
 - `ReportFileError` - Ошибка при сохранении статистического отчета
 - `InvalidDelimeterError` - Неверный разделитель у csv файла
+- `InvalidCLIArgumentsError` - Неверные аргументы для CLI
 
 ## Структура проекта
 
@@ -64,11 +69,21 @@ lab_01/
     parsers.py
     report.py
   tests/
+    test_data/
+      empty.csv
+      empty.jsonl
+      events.csv
+      events.jsonl
+      invalid_level.jsonl
+      invalid_source.jsonl
+      invalid_timestamp.jsonl
+      invalid.csv
+      invalid.jsonl
+      top5.jsonl
     __init__.py
-
-
-
-
+    test_analysis.py
+    test_cli.py
+    test_parser.py
   .gitignore
   pyproject.toml
   pytest.ini
@@ -89,15 +104,17 @@ lab_01/
 - **report.py** - Содержит логику сохранения отчета
 
 #### Тестирование ДОПИСАТЬ ДОПИСАТЬ
-- **test_calc.py** - Тестирование калькулятора, по 2 теста на каждую механику ДОПИСАТЬ ДОПИСАТЬ
-- **testДОПИСАТЬ ДОПИСАТЬ_cli.py** - ДОПИСАТЬ ДОПИСАТЬ
-- **test_convert.py** - ДОПИСАТЬ ДОПИСАТЬ ДОПИСАТЬ ДОПИСАТЬ
+- **test_data** - Папка с файлами для тестирования
+- **test_analysis** - Тестирование анализатора
+- **test_cli** - Тестирование CLI
+- **test_parsers** - Тестирование парсеров
 
 ## Методика
 
 ### Считываение аргументов
 1. Происходит считывание аргументов из командной строки с помощью argparse
 2. Происходит анализ аргументов
+- При ошибке argparse, выводится ошибка `IndvalidCLIArgumetsError`
 - Если присутствует `--help` то выводится help
 
 ### Создание статистики
