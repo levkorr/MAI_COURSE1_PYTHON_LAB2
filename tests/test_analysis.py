@@ -19,13 +19,13 @@ def test_one_event():
 
 
 @pytest.mark.parametrize(
-        "level", [
-            "DEBUG",
-            "INFO",
-            "WARNING",
-            "ERROR",
-            "CRITICAL"
-        ])
+    "level", [
+        "DEBUG",
+        "INFO",
+        "WARNING",
+        "ERROR",
+        "CRITICAL"
+    ])
 def test_levels(level):
     stats = copy.deepcopy(STATS)
     stats = analyze(event(level), stats)

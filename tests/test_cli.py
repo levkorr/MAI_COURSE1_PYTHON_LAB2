@@ -8,6 +8,7 @@ from streamstats.errors import InvalidEventError
 
 # Успешные запуски
 
+
 def test_cli_valid_jsonl(capsys):
     sys.argv = ["streamstats", "analyze",
                 "tests/test_data/events.jsonl", "--format", "jsonl"]
@@ -61,6 +62,7 @@ def test_cli_top_5(capsys):
 
 
 # Неуспешные запуски
+
 
 def test_cli_invalid_line():
     sys.argv = ["streamstats", "analyze",

@@ -65,6 +65,7 @@ def test_invalid_fields(filename, error):
         list(parse_jsonl(
             path=f"tests/test_data/{filename}", skip_invalid=False, file_number=1, stats={}))
 
+
 # Неправильное событие
 def test_invalid_json():
     with pytest.raises(InvalidEventError, match="line number: 2"):
