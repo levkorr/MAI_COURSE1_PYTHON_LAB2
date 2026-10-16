@@ -49,7 +49,7 @@ def test_cli_skip_invalid(capsys):
     main()
     result = json.loads(capsys.readouterr().out)
     assert result["total_events"] == 2
-    assert result["invalid_lines"] == 1
+    assert result["invalid_events"] == 1
 
 
 def test_cli_top_5(capsys):

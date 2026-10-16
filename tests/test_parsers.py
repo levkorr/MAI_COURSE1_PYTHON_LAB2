@@ -43,11 +43,11 @@ def test_empty_file(file_format, parser):
         ("csv", parse_csv),
     ])
 def test_skip_invalid(file_format, parser):
-    stats = {"invalid_lines": 0}
+    stats = {"invalid_events": 0}
     result = list(parser(
         path=f"tests/test_data/invalid.{file_format}", skip_invalid=True, file_number=1, stats=stats))
     assert len(result) == 2
-    assert stats["invalid_lines"] == 1
+    assert stats["invalid_events"] == 1
 
 
 # Неуспешные запуски
