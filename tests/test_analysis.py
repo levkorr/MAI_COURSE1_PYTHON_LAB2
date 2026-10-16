@@ -18,7 +18,14 @@ def test_one_event():
     assert stats["by_source"]["app"] == 1
 
 
-@pytest.mark.parametrize("level", ["DEBUG", "INFO", "WARNING", "ERROR", "CRITICAL"])
+@pytest.mark.parametrize(
+        "level", [
+            "DEBUG",
+            "INFO",
+            "WARNING",
+            "ERROR",
+            "CRITICAL"
+        ])
 def test_levels(level):
     stats = copy.deepcopy(STATS)
     stats = analyze(event(level), stats)
@@ -37,7 +44,7 @@ def test_first_and_last_timestamp():
 
 def test_sources_and_errors():
     stats = copy.deepcopy(STATS)
-    for item in [event("ERROR", "api"), event("CRITICAL", "api"), event("INFO", "web")]:
+    for item in [event(level="ERROR", source="api"), event(level="CRITICAL", source="api"), event(level="INFO", source="web")]:
         analyze(item, stats)
     assert stats["total_events"] == 3
     assert stats["by_source"] == {"api": 2, "web": 1}
