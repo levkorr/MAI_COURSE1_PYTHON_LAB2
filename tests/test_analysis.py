@@ -15,7 +15,9 @@ def test_one_event():
     stats = analyze(event(), stats)
     assert stats["total_events"] == 1
     assert stats["by_level"]["INFO"] == 1
-    assert stats["by_source"]["app"] == 1
+    assert stats["by_source"] == {"app": 1}
+    assert stats["first_timestamp"] == "2026-01-01T10:00:00"
+    assert stats["last_timestamp"] == "2026-01-01T10:00:00"
 
 
 @pytest.mark.parametrize(
@@ -30,8 +32,10 @@ def test_levels(level):
     stats = copy.deepcopy(STATS)
     stats = analyze(event(level), stats)
     assert stats["by_level"][level] == 1
-    assert stats["top_error_sources"] == (
-        {"app": 1} if level in ("ERROR", "CRITICAL") else {})
+    if level in ["ERROR", "CRITICAL"]:
+        assert stats["top_error_sources"] == {"app": 1}
+    else:
+        assert stats["top_error_sources"] == {}
 
 
 def test_first_and_last_timestamp():

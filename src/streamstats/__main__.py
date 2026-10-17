@@ -159,7 +159,7 @@ def main():
 
         stats = json.dumps(stats, indent=4)
 
-        report(stats, report_path)
+        report(stats, report_path, inputs)
 
 
 if __name__ == "__main__":

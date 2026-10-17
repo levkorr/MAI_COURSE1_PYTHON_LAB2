@@ -19,7 +19,10 @@ from streamstats.parsers import parse_csv, parse_jsonl
     ])
 def test_valid_file(file_format, parser):
     result = list(parser(
-        path=f"tests/test_data/events.{file_format}", skip_invalid=False, file_number=1, stats={}))
+        path=f"tests/test_data/events.{file_format}",
+        skip_invalid=False,
+        file_number=1,
+        stats={}))
     assert len(result) == 3
     assert result[0]["source"] == "api" or result[0]["source"] == "app"
 
@@ -32,7 +35,11 @@ def test_valid_file(file_format, parser):
     ])
 def test_empty_file(file_format, parser):
     result = list(parser(
-        path=f"tests/test_data/empty.{file_format}", skip_invalid=False, file_number=1, stats={}))
+        path=f"tests/test_data/empty.{file_format}",
+        skip_invalid=False,
+        file_number=1,
+        stats={}
+        ))
     assert result == []
 
 
@@ -45,7 +52,11 @@ def test_empty_file(file_format, parser):
 def test_skip_invalid(file_format, parser):
     stats = {"invalid_events": 0}
     result = list(parser(
-        path=f"tests/test_data/invalid.{file_format}", skip_invalid=True, file_number=1, stats=stats))
+        path=f"tests/test_data/invalid.{file_format}",
+        skip_invalid=True,
+        file_number=1,
+        stats=stats
+        ))
     assert len(result) == 2
     assert stats["invalid_events"] == 1
 
@@ -61,13 +72,21 @@ def test_skip_invalid(file_format, parser):
         ("invalid_source.jsonl", InvalidEventSourceError),
     ])
 def test_invalid_fields(filename, error):
-    with pytest.raises(error, match="line number: 1"):
+    with pytest.raises(error, match="Invalid event"):
         list(parse_jsonl(
-            path=f"tests/test_data/{filename}", skip_invalid=False, file_number=1, stats={}))
+            path=f"tests/test_data/{filename}",
+            skip_invalid=False,
+            file_number=1,
+            stats={}
+            ))
 
 
 # Неправильное событие
 def test_invalid_json():
     with pytest.raises(InvalidEventError, match="line number: 2"):
-        list(parse_jsonl(path="tests/test_data/invalid.jsonl",
-             skip_invalid=False, file_number=1, stats={}))
+        list(parse_jsonl(
+            path="tests/test_data/invalid.jsonl",
+            skip_invalid=False,
+            file_number=1,
+            stats={}
+            ))

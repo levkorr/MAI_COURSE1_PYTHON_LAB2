@@ -1,10 +1,59 @@
 import json
 import sys
+import subprocess
 
 import pytest
 
 from streamstats.__main__ import main
 from streamstats.errors import InvalidEventError
+
+# Integration test CLI с временным каталогом.
+
+
+def test_cli_integration_valid(tmp_path):
+    input_file = tmp_path / "events.jsonl"
+
+    event = {"timestamp": "2026-01-01T12:00:00", "level": "ERROR",
+             "source": "api", "message": "Ошибка сервера"}
+
+    with input_file.open("w", encoding="utf-8") as file:
+        json.dump(event, file, ensure_ascii=False)
+
+    output_file = tmp_path / "report.json"
+
+    result = subprocess.run(
+        [
+            sys.executable,
+            "-m",
+            "streamstats",
+            "analyze",
+            str(input_file),
+            "--format",
+            "jsonl",
+            "--output",
+            str(output_file)
+        ],
+        capture_output=True,
+        text=True,
+        encoding="utf-8"
+    )
+
+    assert result.returncode == 0
+    assert output_file.exists()
+
+    stats = json.loads(output_file.read_text(encoding="utf-8"))
+
+    assert stats["total_events"] == 1
+    assert stats["by_level"]["ERROR"] == 1
+    assert stats["by_source"]["api"] == 1
+    assert stats["top_error_sources"] == {"api": 1}
+    assert stats["first_timestamp"] == "2026-01-01T12:00:00"
+    assert stats["last_timestamp"] == "2026-01-01T12:00:00"
+
+    saved_event = json.loads(input_file.read_text(encoding="utf-8"))
+    
+    assert saved_event == event
+
 
 # Успешные запуски
 

@@ -3,7 +3,7 @@ import pathlib
 from .errors import ReportFileError
 
 
-def report(stats, report_path):
+def report(stats, report_path, inputs):
     ''' Обрабатывает вывод статистики
 
     Args:
@@ -18,8 +18,17 @@ def report(stats, report_path):
     '''
     if report_path:
         try:
-            pathlib.Path("reports").mkdir(exist_ok=True)
-            with open(f"reports/{report_path}", "w", encoding="utf-8") as file:
+            output = pathlib.Path(report_path)
+            output = output.resolve()
+            for input in inputs:
+                input = pathlib.Path(input)
+                input = input.resolve()
+                if output==input:
+                    raise ReportFileError(report_path)
+
+            output.parent.mkdir(parents=True, exist_ok=True)
+
+            with open(output, "w", encoding="utf-8") as file:
                 file.write(stats)
         except OSError:
             raise ReportFileError(report_path)
