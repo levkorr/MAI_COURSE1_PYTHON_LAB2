@@ -1,6 +1,5 @@
 class StreamStatsError(Exception):
     "Родительский класс всех ошибок модуля streamstats"
-    pass
 
 
 class UnsupportedFormatError(StreamStatsError):

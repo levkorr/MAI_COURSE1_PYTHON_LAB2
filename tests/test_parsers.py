@@ -8,7 +8,6 @@ from streamstats.errors import (
 )
 from streamstats.parsers import parse_csv, parse_jsonl
 
-
 # Успешные запуски
 
 # Полный файл

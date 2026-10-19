@@ -1,6 +1,6 @@
 import json
-import sys
 import subprocess
+import sys
 
 import pytest
 
@@ -34,6 +34,7 @@ def test_cli_integration_valid(tmp_path):
             str(output_file)
         ],
         capture_output=True,
+        check=False,
         text=True,
         encoding="utf-8"
     )
@@ -51,7 +52,7 @@ def test_cli_integration_valid(tmp_path):
     assert stats["last_timestamp"] == "2026-01-01T12:00:00"
 
     saved_event = json.loads(input_file.read_text(encoding="utf-8"))
-    
+
     assert saved_event == event
 
 
